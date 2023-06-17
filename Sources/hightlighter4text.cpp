@@ -36,6 +36,24 @@ void Highlighter4Text::setFont(QFont font)
     mFontSize = font.pointSize();
 }
 
+void Highlighter4Text::highlightBlock(const QString &text) {
+    QRegularExpression reg;
+    //使用c++的范围for循环
+    for(HighlightRule &rule:highlightRules)
+    {
+        auto pExpression = rule.pattern;
+        auto resultMatch = pExpression.match(text);
+        //如果匹配上了,一次性把所有的全部修改
+        for (int i = 0; i <= resultMatch.lastCapturedIndex(); ++i) {
+            int index = resultMatch.capturedStart(i);
+            int length = resultMatch.capturedLength(i);
+            setFormat(index,length,rule.format);
+        }
+    }
+    //最后处理多行文本注释
+    addMultiLineCommentFormat(text);
+}
+
 void Highlighter4Text::addNormalTextFormat() {
     HighlightRule rule;
     rule.pattern =  QRegularExpression("[a-z0-9A-Z]+");
@@ -150,4 +168,55 @@ void Highlighter4Text::addFunctionFormat()
     //匹配后括号部分
     rule.pattern = QRegularExpression("\\)");
     highlightRules.append(rule);
+}
+
+void Highlighter4Text::addMultiLineCommentFormat(const QString &text){
+
+    setCurrentBlockState(0);
+    // /*
+    QRegularExpression commentBeginReg("/\\*");
+    // */
+    QRegularExpression commentEndReg("\\*/");
+    QTextCharFormat multiLineCommentFormat;
+    multiLineCommentFormat.setFont(QFont(mFontFamily,mFontSize));
+    multiLineCommentFormat.setForeground(Qt::darkGreen);
+    multiLineCommentFormat.setFontItalic(true);
+
+    int startIndex = 0;
+    //状态不为1，则处理开头
+    if(previousBlockState()!=1)
+    {
+        auto matchBegin= commentBeginReg.match(text);
+        startIndex = matchBegin.capturedStart();
+    }
+    //确实存在开头符，则寻找结尾，并执行高亮
+    while(startIndex>=0)
+    {
+        auto endMatch = commentEndReg.match(text);
+        int endIndex = endMatch.capturedEnd();
+        int commentLength = 0;
+        if(endIndex == -1)
+        {
+            //当前text没结束，即comment还未完，则把当前处理的text状态改为1
+            setCurrentBlockState(1);
+            //这一块text中comment的长度
+            commentLength = text.length() - startIndex;
+        }
+        else
+        {
+            //当前text找到了结尾符
+            //内容长度+结束符的长度
+//            commentLength = endIndex - startIndex + endMatch.capturedLength();
+            commentLength = endIndex - startIndex;
+        }
+        //执行高亮
+        setFormat(startIndex,commentLength,multiLineCommentFormat);
+
+        //寻找后面的开头符
+//        auto matchNextBegin= commentBeginReg.match(text, startIndex + commentLength);
+        auto matchNextBegin= commentBeginReg.match(text, endIndex);
+
+        //如果在后面能找到开头符，则开启下一轮循环，找不到则退出
+        startIndex = matchNextBegin.capturedStart();
+    }
 }

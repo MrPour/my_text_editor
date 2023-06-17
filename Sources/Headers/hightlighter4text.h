@@ -17,7 +17,7 @@ public:
     void setFont(QFont font);
 
 protected:
-    //实现父类的纯虚方法
+    //实现父类的纯虚方法,对文本执行高亮规则
     void highlightBlock(const QString &text) override;
 
 private:
