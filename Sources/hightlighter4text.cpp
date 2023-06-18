@@ -112,7 +112,7 @@ void Highlighter4Text::addCommentFormat()
 void Highlighter4Text::addKeywordsFormat() {
     HighlightRule rule;
     //keyWordsStream,注意路径
-    QFile file("://config/keywords.txt");
+    QFile file(":/config/keywords.txt");
     QTextStream keyWordsStream(&file);
     QTextCharFormat keywordsFormat;
     keywordsFormat.setFont(QFont(mFontFamily,mFontSize));

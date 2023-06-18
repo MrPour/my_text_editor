@@ -1,5 +1,4 @@
 <RCC>
-    <qresource prefix="/config"/>
     <qresource prefix="/">
         <file>config/keywords.txt</file>
     </qresource>

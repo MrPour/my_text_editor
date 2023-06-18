@@ -15,8 +15,8 @@ find_package(Qt6 COMPONENTS
         REQUIRED)
 
 add_executable(myqtdemo
-        Sources/Forms/images.qrc
-        Sources/Forms/keywords.qrc
+        Sources/resources/images.qrc
+        Sources/resources/keywords.qrc
         Sources/main.cpp
         Sources/mainwindow.cpp
         Sources/Headers/mainwindow.h

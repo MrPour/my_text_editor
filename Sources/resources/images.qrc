@@ -1,5 +1,4 @@
 <RCC>
-    <qresource prefix="/images"/>
     <qresource prefix="/">
         <file>images/bold.png</file>
         <file>images/copy.png</file>

@@ -14,7 +14,7 @@
    <string>MyEditor</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="images.qrc">
+   <iconset resource="../resources/images.qrc">
     <normaloff>:/images/pencil.png</normaloff>:/images/pencil.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -166,7 +166,7 @@
   </widget>
   <action name="new_file">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset resource="../resources/images.qrc">
      <normaloff>:/images/new.png</normaloff>:/images/new.png</iconset>
    </property>
    <property name="text">
@@ -178,7 +178,7 @@
   </action>
   <action name="save_file">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset resource="../resources/images.qrc">
      <normaloff>:/images/save.png</normaloff>:/images/save.png</iconset>
    </property>
    <property name="text">
@@ -190,7 +190,7 @@
   </action>
   <action name="open_file">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset resource="../resources/images.qrc">
      <normaloff>:/images/open.png</normaloff>:/images/open.png</iconset>
    </property>
    <property name="text">
@@ -202,7 +202,7 @@
   </action>
   <action name="save_as">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset resource="../resources/images.qrc">
      <normaloff>:/images/save_as.png</normaloff>:/images/save_as.png</iconset>
    </property>
    <property name="text">
@@ -214,7 +214,7 @@
   </action>
   <action name="paste">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset resource="../resources/images.qrc">
      <normaloff>:/images/paste.png</normaloff>:/images/paste.png</iconset>
    </property>
    <property name="text">
@@ -226,7 +226,7 @@
   </action>
   <action name="copy">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset resource="../resources/images.qrc">
      <normaloff>:/images/copy.png</normaloff>:/images/copy.png</iconset>
    </property>
    <property name="text">
@@ -238,7 +238,7 @@
   </action>
   <action name="cut">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset resource="../resources/images.qrc">
      <normaloff>:/images/cut.png</normaloff>:/images/cut.png</iconset>
    </property>
    <property name="text">
@@ -250,7 +250,7 @@
   </action>
   <action name="font">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset resource="../resources/images.qrc">
      <normaloff>:/images/font.png</normaloff>:/images/font.png</iconset>
    </property>
    <property name="text">
@@ -262,7 +262,7 @@
   </action>
   <action name="undo">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset resource="../resources/images.qrc">
      <normaloff>:/images/edit_undo.png</normaloff>:/images/edit_undo.png</iconset>
    </property>
    <property name="text">
@@ -274,7 +274,7 @@
   </action>
   <action name="redo">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset resource="../resources/images.qrc">
      <normaloff>:/images/edit_redo.png</normaloff>:/images/edit_redo.png</iconset>
    </property>
    <property name="text">
@@ -286,7 +286,7 @@
   </action>
   <action name="about">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset resource="../resources/images.qrc">
      <normaloff>:/images/info.png</normaloff>:/images/info.png</iconset>
    </property>
    <property name="text">
@@ -298,7 +298,7 @@
   </action>
   <action name="exit">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset resource="../resources/images.qrc">
      <normaloff>:/images/exit.png</normaloff>:/images/exit.png</iconset>
    </property>
    <property name="text">
@@ -315,7 +315,7 @@
   </action>
   <action name="print">
    <property name="icon">
-    <iconset resource="images.qrc">
+    <iconset resource="../resources/images.qrc">
      <normaloff>:/images/print.png</normaloff>:/images/print.png</iconset>
    </property>
    <property name="text">
@@ -327,7 +327,7 @@
   </action>
  </widget>
  <resources>
-  <include location="images.qrc"/>
+  <include location="../resources/images.qrc"/>
  </resources>
  <connections/>
 </ui>
