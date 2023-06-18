@@ -56,8 +56,11 @@ private:
     int mFontSize;
     QSettings * mSettings;
 
+    //初始化父容器字体
     void initFont();
-    void initAction();
+    //根据是否有tab页签刷新功能
+    void refreshFunctionByTab();
+    //创建新的标签页
     void createNewTab(QString string);
 };
 
