@@ -9,6 +9,7 @@
 #include <QMainWindow>
 #include <QSettings>
 
+//声明Ui命名空间，此命名空间也可以通过#include "Forms/ui_MainWindow.h"引入
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -21,7 +22,10 @@ public:
     ~MainWindow() override;
     void saveSuccessAction(MyEditor* myEditor);
 protected:
+    //重写关闭整个容器的函数
     void closeEvent(QCloseEvent *event) override;
+
+    //1、对ui对象中的actions绑定对应的slots
     //用ui设计不必再写connect()函数,在ui里编写QAction会在此处自动生成相应的槽函数
 private slots:
     void on_new_file_triggered();
@@ -52,16 +56,20 @@ private slots:
 
     void on_tabWidget_tabCloseRequested(int index);
 private:
+
+    //对象指针 这里的指针指向的是来自于ui_MainWindow.h中Ui_MainWindow的子类Ui::MainWindow
     Ui::MainWindow *ui;
+    //两个字体相关的成员变量
     QString mFontFamily;
     int mFontSize;
+    //初始配置信息
     QSettings * mSettings;
 
-    //初始化父容器字体
+    //2、初始化容器字体
     void initFont();
-    //根据是否有tab页签刷新功能
+    //3、根据是否有tab页签对Ui按钮进行管理
     void refreshFunctionByTab();
-    //创建新的标签页
+    //4、创建新的标签页MyEditor
     void createNewTab(QString string);
 };
 

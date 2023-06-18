@@ -11,6 +11,7 @@
 #include <QPainter>
 
 
+//构造函数使用列表初始化，首先调用父类构造器初始化父类的成员，再对自己的成员变量ui赋值
 MainWindow::MainWindow(QWidget *parent) :
         QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
@@ -35,8 +36,8 @@ void MainWindow::refreshFunctionByTab()
 {
     //判断是否存在tab页签
    bool valid =  ui->tabWidget->count()!=0;
-   //对父容器的按钮进行开启和关闭
-   ui->save_file->setEnabled(valid);
+   //对ui按钮进行开启和关闭
+    ui->save_file->setEnabled(valid);
     ui->save_as->setEnabled(valid);
     ui->copy->setEnabled(valid);
     ui->paste->setEnabled(valid);
