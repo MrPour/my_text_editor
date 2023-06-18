@@ -22,6 +22,7 @@ public:
     void saveSuccessAction(MyEditor* myEditor);
 protected:
     void closeEvent(QCloseEvent *event) override;
+    //用ui设计不必再写connect()函数,在ui里编写QAction会在此处自动生成相应的槽函数
 private slots:
     void on_new_file_triggered();
 

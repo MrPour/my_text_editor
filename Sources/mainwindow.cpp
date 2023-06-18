@@ -35,7 +35,7 @@ void MainWindow::refreshFunctionByTab()
 {
     //判断是否存在tab页签
    bool valid =  ui->tabWidget->count()!=0;
-   //对父容器的基本方法进行开启和关闭
+   //对父容器的按钮进行开启和关闭
    ui->save_file->setEnabled(valid);
     ui->save_as->setEnabled(valid);
     ui->copy->setEnabled(valid);
