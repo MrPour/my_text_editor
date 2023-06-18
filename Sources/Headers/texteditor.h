@@ -15,8 +15,9 @@ class MyEditor:public QPlainTextEdit{
 public:
     explicit MyEditor(QWidget *parent = nullptr,QFont font = QFont("Consolas",14));
     ~MyEditor();
-    //绘制行号
+    //绘制行号widget
     void LineNumberWidgetPaintEvent(QPaintEvent * event);
+
     void LineNumberWidgetMousePressEvent(QMouseEvent *event);
     void LineNumberWidgetWheelEvent(QWheelEvent *event);
     //保存内容功能
@@ -45,21 +46,23 @@ private:
     void initConnect();
     //初始化高亮对象
     void initHighLight();
-    //适应字体变化
-    int getLineNumberWidgetWidth();
+    //适应字体变化计算行统计组件的宽度
+    int calculateLineNumberWidgetWidth();
 private slots:
     //高亮当前行
     void highlightCurrentLine();
-    void updateLineNumberWidget(QRect rect,int dy);
+    //根据当前窗体的QRect更新行统计组件
+    void repaintLineNumberWidget(QRect rect, int dy);
+    //更新行统计组件的宽度
     void updateLineNumberWidgetWidth();
-    //更新保存状态
+    //有新文字输入时 - 将保存状态改为否
     void updateSaveState();
 
 protected:
     //窗口变化事件
     void resizeEvent(QResizeEvent *event) override;
 signals:
-
+   //父类已经提供了很多signals
 };
 
 //绘制行号的挂件类

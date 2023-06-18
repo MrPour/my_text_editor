@@ -12,6 +12,7 @@
 #include <QTextStream>
 MyEditor::MyEditor(QWidget *parent, QFont font) : QPlainTextEdit(parent)
 {
+    //在editor中，随着外部事件/字体变化等的触发得到更新，并绘制出来
     lineNumberWidget = new LineNumberWidget(this);
     //初始化连接
     initConnect();
@@ -21,9 +22,9 @@ MyEditor::MyEditor(QWidget *parent, QFont font) : QPlainTextEdit(parent)
     setAllFont(font);
     //当前行高亮显示
     highlightCurrentLine();
-    //设置边距
+    //设置行统计的宽度
     updateLineNumberWidgetWidth();
-    //【继承父类的方法】设置自动换行
+    //【继承父类的方法】设置文本的自动换行
     setLineWrapMode(QPlainTextEdit::NoWrap);
 }
 
@@ -34,17 +35,18 @@ MyEditor::~MyEditor()
 }
 
 void MyEditor::initConnect() {
-    //事件发生和接收槽的处理方法连接起来
-    //光标事件
+    //观察者模式：当信号发出时，被连接的槽函数会自动被回调。
+    //光标点击到相应行，该行高亮显示
     connect(this, SIGNAL(cursorPositionChanged()),this, SLOT(highlightCurrentLine()));
-    //块内数据发生变化
+    //当新增块时统计行也更新
     connect(this, SIGNAL(blockCountChanged(int)),this,SLOT(updateLineNumberWidgetWidth()));
-    //行号检测时就更新行号
-    connect(this,SIGNAL(updateRequest(QRect,int)),this,SLOT(updateLineNumberWidget(QRect,int)));
+    //窗体被重绘时，使用当前的QRect更新行统计组件
+    connect(this,SIGNAL(updateRequest(QRect,int)),this,SLOT(repaintLineNumberWidget(QRect, int)));
     //文字更新时更新存储状态
     connect(this,SIGNAL(textChanged()),this,SLOT(updateSaveState()));
 }
 void MyEditor::initHighLight() {
+    //QTextDocument 获取当前文件
     highlighter = new Highlighter4Text(document());
 }
 void MyEditor::setAllFont(QFont font) {
@@ -52,40 +54,43 @@ void MyEditor::setAllFont(QFont font) {
     setFont(font);
     //更新高亮字体
     highlighter->setFont(font);
-    //更新行统计widget的宽度
+    //字体变化引发左侧视窗的宽度改变
     updateLineNumberWidgetWidth();
 }
 
 void MyEditor::highlightCurrentLine() {
         QList<QTextEdit::ExtraSelection> extraSelections;
+        //高亮格式
         QTextEdit::ExtraSelection selection;
         selection.format.setBackground(QColor(0,100,100,20));
         selection.format.setProperty(QTextFormat::FullWidthSelection,true);
+        //获取光标
         selection.cursor = textCursor();
-
         extraSelections.append(selection);
+        //为光标行设置高亮
         setExtraSelections(extraSelections);
 }
 
-int MyEditor::getLineNumberWidgetWidth()
+int MyEditor::calculateLineNumberWidgetWidth()
 {
     //获取统计行号面板的宽度 -- 行的宽度随字体的尺寸正相关变化
     //blockCount -- 文本块个数(文本块/回车) fontMetrics -- 字体尺寸 horizontalAdvance -- 覆盖一个字符串的像素宽度
     return 8+QString::number(blockCount()+1).length()*fontMetrics().horizontalAdvance(QChar('0'));
 }
 
-void MyEditor::updateLineNumberWidget(QRect rect, int dy)
+void MyEditor::repaintLineNumberWidget(QRect rect, int dy)
 {
     if(dy)
         lineNumberWidget->scroll(0,dy);
     else
-        //重新绘制
-        lineNumberWidget->update(0,rect.y(),getLineNumberWidgetWidth(),rect.height());
+        //重新绘制组件
+        lineNumberWidget->update(0,rect.y(),calculateLineNumberWidgetWidth(),rect.height());
 }
 
 void MyEditor::updateLineNumberWidgetWidth()
 {
-    setViewportMargins(getLineNumberWidgetWidth(),0,0,0);
+    //设置编辑框的视口大小，参数1为左侧的多余空白
+    setViewportMargins(calculateLineNumberWidgetWidth(),0,0,0);
 }
 
 void MyEditor::updateSaveState()
@@ -97,7 +102,7 @@ void MyEditor::resizeEvent(QResizeEvent *event) {
     QPlainTextEdit::resizeEvent(event);
     //行统计控件的宽高及位置坐标，空间高度和当前rect的高度相同
     //contentsRect()返回当前布局的矩形
-    lineNumberWidget->setGeometry(0,0,getLineNumberWidgetWidth(),contentsRect().height());
+    lineNumberWidget->setGeometry(0,0,calculateLineNumberWidgetWidth(),contentsRect().height());
 }
 
 void MyEditor::LineNumberWidgetPaintEvent(QPaintEvent *event)
@@ -121,7 +126,7 @@ void MyEditor::LineNumberWidgetPaintEvent(QPaintEvent *event)
         //设置画笔颜色
         painter.setPen(cursorTop == top?Qt::black:Qt::gray);
         //绘制文字，行号从1开始，所以+1
-        painter.drawText(0,top,getLineNumberWidgetWidth()-4,bottom-top,Qt::AlignRight,QString::number(blockNumber+1));
+        painter.drawText(0,top,calculateLineNumberWidgetWidth()-4,bottom-top,Qt::AlignRight,QString::number(blockNumber+1));
         //下一个block
         block = block.next();
 
