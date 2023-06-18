@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>config/keywords.txt</file>
+        <file alias = "keywords">config/keywords.txt</file>
     </qresource>
 </RCC>
