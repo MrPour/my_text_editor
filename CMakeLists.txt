@@ -14,12 +14,24 @@ find_package(Qt6 COMPONENTS
         Widgets
         REQUIRED)
 
-add_executable(myqtdemo Sources/main.cpp Sources/mainwindow.cpp Sources/Headers/mainwindow.h Sources/Forms/mainwindow.ui Sources/hightlighter4text.cpp Sources/Headers/hightlighter4text.h Sources/texteditor.cpp Sources/Headers/texteditor.h)
+add_executable(myqtdemo
+        Sources/Forms/images.qrc
+        Sources/Forms/keywords.qrc
+        Sources/main.cpp
+        Sources/mainwindow.cpp
+        Sources/Headers/mainwindow.h
+        Sources/Forms/mainwindow.ui
+        Sources/hightlighter4text.cpp
+        Sources/Headers/hightlighter4text.h
+        Sources/texteditor.cpp
+        Sources/Headers/texteditor.h)
+
 target_link_libraries(myqtdemo
         Qt::Core
         Qt::Gui
         Qt::Widgets
         )
+
 include_directories(
         ${PROJECT_SOURCE_DIR}/include
         ${PROJECT_SOURCE_DIR}/Sources/Headers

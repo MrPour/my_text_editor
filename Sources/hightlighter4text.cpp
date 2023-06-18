@@ -111,15 +111,15 @@ void Highlighter4Text::addCommentFormat()
 
 void Highlighter4Text::addKeywordsFormat() {
     HighlightRule rule;
-    //keyWordsStream
-    QFile file("config/keywords.txt");
+    //keyWordsStream,注意路径
+    QFile file("://config/keywords.txt");
     QTextStream keyWordsStream(&file);
     QTextCharFormat keywordsFormat;
     keywordsFormat.setFont(QFont(mFontFamily,mFontSize));
     keywordsFormat.setForeground(Qt::darkMagenta);
     rule.format = keywordsFormat;
 
-    //以只读和text方式打开文件
+    //以只读和text方式打开txt文件
     if(file.open(QIODevice::ReadOnly|QIODevice::Text))
     {
         keyWordsStream.seek(0);
