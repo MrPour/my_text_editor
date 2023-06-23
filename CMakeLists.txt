@@ -6,7 +6,8 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-set(CMAKE_PREFIX_PATH "D:/qt/6.5.1/mingw_64/lib/cmake")
+#这个地方不同的电脑有不同的配置，记得修改
+set(CMAKE_PREFIX_PATH "D:/App/QT/6.5.1/mingw_64/lib/cmake")
 
 find_package(Qt6 COMPONENTS
         Core
