@@ -17,8 +17,9 @@ public:
     ~MyEditor();
     //绘制行号widget
     void LineNumberWidgetPaintEvent(QPaintEvent * event);
-
+    //高亮鼠标点击的行
     void LineNumberWidgetMousePressEvent(QMouseEvent *event);
+    //随着鼠标滚轮滚动
     void LineNumberWidgetWheelEvent(QWheelEvent *event);
     //保存内容功能
     bool saveFile();
@@ -75,6 +76,7 @@ public:
     };
 
 protected:
+    //一旦Widget刷新就会重绘
     void paintEvent(QPaintEvent *event) override
     {
         codeEditor->LineNumberWidgetPaintEvent(event);

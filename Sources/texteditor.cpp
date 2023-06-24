@@ -116,28 +116,38 @@ void MyEditor::LineNumberWidgetPaintEvent(QPaintEvent *event)
     int blockNumber = block.blockNumber();
     //拿到当前的block的top
     int cursorTop = blockBoundingGeometry(textCursor().block()).translated(contentOffset()).top();
-    //拿到block的top
-    int top = blockBoundingGeometry(block).translated(contentOffset()).top();
-    //拿到block的bottom
-    int bottom = top + blockBoundingRect(block).height();
-    while (block.isValid()&&top<=event->rect().bottom())
+    //拿到block的top位置初始值
+    int topIndex = blockBoundingGeometry(block).translated(contentOffset()).top();
+    //行号的高度
+    int numHeight = blockBoundingRect(block).height();
+    //行号的宽度
+    int numWidth = calculateLineNumberWidgetWidth()-4;
+    //拿到block的bottom位置初始值
+    int bottomIndex = topIndex + numHeight;
+    //窗体底部的位置
+    int tabBottomIndex = event->rect().bottom();
+    //一行就是一个block，只要top在rect之前就绘制行号
+    while (block.isValid() && topIndex <= tabBottomIndex)
     {
+        //行号值
+        auto num = QString::number(blockNumber+1);
         //设置画笔颜色
-        painter.setPen(cursorTop == top?Qt::black:Qt::gray);
-        //绘制文字，行号从1开始，所以+1
-        painter.drawText(0,top,calculateLineNumberWidgetWidth()-4,bottom-top,Qt::AlignRight,QString::number(blockNumber+1));
+        painter.setPen(cursorTop == topIndex ? Qt::black : Qt::gray);
+        //绘制文字，设置宽和高及位置，行号从1开始，所以+1
+        painter.drawText(0, topIndex, numWidth, numHeight, Qt::AlignRight, num);
         //下一个block
         block = block.next();
-
-        top = bottom;
-        bottom = top + blockBoundingRect(block).height();
+        //下一轮的top和bottom
+        topIndex = bottomIndex;
+        bottomIndex = topIndex + numHeight;
         blockNumber++;
     }
 }
 
 void MyEditor::LineNumberWidgetMousePressEvent(QMouseEvent *event)
 {
-    setTextCursor(QTextCursor(document()->findBlockByLineNumber(event->y()/fontMetrics().height()+verticalScrollBar()->value())));
+    int blockNum = event->y()/fontMetrics().height()+verticalScrollBar()->value();
+    setTextCursor(QTextCursor(document()->findBlockByLineNumber(blockNum)));
 }
 
 void MyEditor::LineNumberWidgetWheelEvent(QWheelEvent *event)
