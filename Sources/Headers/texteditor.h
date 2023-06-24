@@ -45,7 +45,7 @@ private:
     //连接功能
     void initConnect();
     //初始化高亮对象
-    void initHighLight();
+    void initHighLighter();
     //适应字体变化计算行统计组件的宽度
     int calculateLineNumberWidgetWidth();
 private slots:

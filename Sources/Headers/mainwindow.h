@@ -57,7 +57,7 @@ private slots:
     void on_tabWidget_tabCloseRequested(int index);
 private:
 
-    //对象指针 这里的指针指向的是来自于ui_MainWindow.h中Ui_MainWindow的子类Ui::MainWindow
+    //对象指针 这里的指针指向的是来自于ui_MainWindow.h中Ui_MainWindow的子类Ui::MainWindow，其实现就在头文件中完成
     Ui::MainWindow *ui;
     //两个字体相关的成员变量
     QString mFontFamily;

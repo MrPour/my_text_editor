@@ -11,7 +11,8 @@
 #include <QPainter>
 
 
-//构造函数使用列表初始化，首先调用父类构造器初始化父类的成员，再对自己的成员变量ui赋值
+//构造函数使用列表初始化，首先调用父类构造器初始化父类的成员，再对自己的成员变量ui赋值。
+//MainWindow = QMainWindow + ui
 MainWindow::MainWindow(QWidget *parent) :
         QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
@@ -36,7 +37,7 @@ void MainWindow::refreshFunctionByTab()
 {
     //判断是否存在tab页签
    bool valid =  ui->tabWidget->count()!=0;
-   //对ui按钮进行开启和关闭
+   //【UI】默认是关闭，对ui按钮进行ui可点击性的开启
     ui->save_file->setEnabled(valid);
     ui->save_as->setEnabled(valid);
     ui->copy->setEnabled(valid);
@@ -50,7 +51,7 @@ void MainWindow::refreshFunctionByTab()
 void MainWindow::on_new_file_triggered()
 {
     //新开的标签页是MyEditor，且字体与父容器相同
-    ui->tabWidget->addTab(new MyEditor(this,QFont(mFontFamily,mFontSize)),"new tab");
+    ui->tabWidget->addTab(new MyEditor(this,QFont(mFontFamily,mFontSize)),"新的标签页");
     refreshFunctionByTab();
 }
 
@@ -74,31 +75,7 @@ void MainWindow::on_save_file_triggered()
 void MainWindow::on_open_file_triggered()
 {
     //选择文件的弹出框为"open file"，返回值为所选中的文件名作为新tab的名字
-    createNewTab(QFileDialog::getOpenFileName(this,"open file"));
-}
-
-void MainWindow::createNewTab(QString fineName)
-{
-    QFile file(fineName);
-    //以text的方式打开文件
-    if(!file.open(QIODevice::ReadOnly|QFile::Text))
-    {
-        QMessageBox::warning(this, "warning", "failed to open the file" + file.errorString());
-        return;
-    }
-    QTextStream in(&file);
-    //读入text
-    QString text = in.readAll();
-    //为其创建tab
-    MyEditor* myEditor = new MyEditor(this,QFont(mFontFamily,mFontSize));
-    //将text输入到tab里
-    myEditor->setPlainText(text);
-    myEditor->setFileName(fineName);
-    ui->tabWidget->addTab(myEditor,fineName);
-    refreshFunctionByTab();
-    //设置此次新开的tab标签的序号
-    ui->tabWidget->setCurrentIndex(ui->tabWidget->count()-1);
-    file.close();
+    createNewTab(QFileDialog::getOpenFileName(this,"打开新文件..."));
 }
 
 void MainWindow::on_save_as_triggered()
@@ -155,6 +132,7 @@ void MainWindow::on_font_triggered()
     bool fontSelected;
     //选择字体，并获得所选中的字体
     QFont font = QFontDialog::getFont(&fontSelected,QFont(mFontFamily,mFontSize),this);
+    //程序会在这里等待
     if(fontSelected)
     {
         MyEditor *myEditor = (MyEditor *)ui->tabWidget->currentWidget();
@@ -209,6 +187,7 @@ void MainWindow::on_print_triggered()
 
 void MainWindow::on_tabWidget_tabCloseRequested(int index)
 {
+    //获取到当前的widget，并释放它
     MyEditor *myEditor = (MyEditor *)ui->tabWidget->currentWidget();
 
     //检查当前关闭的页签是否保存
@@ -233,11 +212,35 @@ void MainWindow::on_tabWidget_tabCloseRequested(int index)
     refreshFunctionByTab();
 }
 
+void MainWindow::createNewTab(QString fineName)
+{
+    QFile file(fineName);
+    //以text的方式打开文件
+    if(!file.open(QIODevice::ReadOnly|QFile::Text))
+    {
+        QMessageBox::warning(this, "warning", "failed to open the file" + file.errorString());
+        return;
+    }
+    QTextStream in(&file);
+    //读入text
+    QString text = in.readAll();
+    //为其创建tab
+    MyEditor* myEditor = new MyEditor(this,QFont(mFontFamily,mFontSize));
+    //将text输入到tab里
+    myEditor->setPlainText(text);
+    myEditor->setFileName(fineName);
+    ui->tabWidget->addTab(myEditor,fineName);
+    refreshFunctionByTab();
+    //设置此次新开的tab标签的序号
+    ui->tabWidget->setCurrentIndex(ui->tabWidget->count()-1);
+    file.close();
+}
+
+
 void MainWindow::saveSuccessAction(MyEditor *myEditor)
 {
-    QString filename = myEditor->getFileName();
-    //更新tab页签名字和索引
-    ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), filename);
+    //【UI】更新当前索引tab页签名字
+    ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), myEditor->getFileName());
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)

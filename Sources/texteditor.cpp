@@ -17,7 +17,7 @@ MyEditor::MyEditor(QWidget *parent, QFont font) : QPlainTextEdit(parent)
     //初始化连接
     initConnect();
     //按规则高亮
-    initHighLight();
+    initHighLighter();
     //初始化字体
     setAllFont(font);
     //当前行高亮显示
@@ -45,7 +45,7 @@ void MyEditor::initConnect() {
     //文字更新时更新存储状态
     connect(this,SIGNAL(textChanged()),this,SLOT(updateSaveState()));
 }
-void MyEditor::initHighLight() {
+void MyEditor::initHighLighter() {
     //QTextDocument 获取当前文件
     highlighter = new Highlighter4Text(document());
 }
@@ -60,14 +60,13 @@ void MyEditor::setAllFont(QFont font) {
 
 void MyEditor::highlightCurrentLine() {
         QList<QTextEdit::ExtraSelection> extraSelections;
-        //高亮格式
+        //高亮格式,默认对当前行改背景色
         QTextEdit::ExtraSelection selection;
         selection.format.setBackground(QColor(0,100,100,20));
         selection.format.setProperty(QTextFormat::FullWidthSelection,true);
         //获取光标
         selection.cursor = textCursor();
         extraSelections.append(selection);
-        //为光标行设置高亮
         setExtraSelections(extraSelections);
 }
 
@@ -167,6 +166,7 @@ bool MyEditor::saveFile()
     //返回用户选择的文件名
     if(mFilename.isEmpty())
     {
+        //这个fileName包含了文件的跟目录
         fileName = QFileDialog::getSaveFileName(this,"保存文件");
         //注意，将当前打开的文件名更新
         mFilename = fileName;

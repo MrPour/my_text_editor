@@ -36,6 +36,7 @@ void Highlighter4Text::setFont(QFont font)
     mFontSize = font.pointSize();
 }
 
+//该方法会在内容变化时自动调用
 void Highlighter4Text::highlightBlock(const QString &text) {
     QRegularExpression reg;
     //使用c++的范围for循环
